@@ -1,72 +1,130 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-  <meta charset="UTF-8">
-  <title>Меню на 7 дней: Лето-ПП (фитнес)</title>
+  <meta charset="UTF-8" />
+  <title>Меню на 7 дней | Лето-ПП (фитнес)</title>
+
+  <!-- Шрифт -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet" />
+
   <style>
-    body {
-      font-family: "Segoe UI", sans-serif;
+    :root {
+      /* Цветовая палитра фитнес-меню */
+      --primary: #3ba3f5;  /* ярко-голубой */
+      --accent:  #7dd4ff;  /* бирюзовый градиент */
+      --bg:      #f0f8ff;  /* нежно-голубой фон */
+      --cal:     #e74c3c;  /* цвет калорий */
+    }
+
+    * {
+      box-sizing: border-box;
       margin: 0;
       padding: 0;
-      background: #f0f8ff;
+    }
+
+    body {
+      font-family: "Poppins", sans-serif;
+      background: var(--bg);
       color: #333;
+      overflow-x: hidden;
     }
-    header {
-      background: #3ba3f5;
-      color: white;
-      padding: 2rem;
-      text-align: center;
+
+  /* ---------- HEADER ---------- */
+header{
+  background:linear-gradient(135deg,var(--accent) 0%,var(--primary) 100%);
+  color:#fff;
+  padding:4rem 1rem 6rem;
+  text-align:center;
+  position:relative;
+  overflow:hidden;
+  z-index:-10;              /* ← волна всегда поверх карточек */
+}
+
+header h1 {
+  font-size: clamp(2.25rem, 4vw + 1rem, 3.5rem);
+  font-weight: 600;
+  letter-spacing: 1px;
+  animation: fadeInDown 1s ease-out forwards;
+}
+
+header p {
+  margin-top: 0.75rem;
+  font-size: clamp(1rem, 1vw + 0.5rem, 1.5rem);
+  animation: fadeInDown 1s ease-out 0.2s forwards;
+  opacity: 0;
+}
+
+/* Волна на нижней границе */
+header::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -1px;
+  width: 100%;
+  height: 120px;
+
+  /* ► подставляем фон именно из fitness-палитры  */
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100%25' height='100%25'%3E%3Cpath d='M0 30 C 30 90 70 0 100 60 L100 100 L0 100 Z' fill='%23f0f8ff'/%3E%3C/svg%3E");
+  background-size: 100% 100%;
+}
+
+/* ---------- GRID ---------- */
+.container{
+  max-width:1200px;
+
+  /* было -80 ➜ -50 ➜ делаем ещё меньше */
+  margin:-80px auto 4rem;  /* карточки остаются «под» волной */
+
+  padding:0 2rem;
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+  gap:2rem;
+  position:relative;       /* создаём свой контекст, чтобы z-index сработал */
+  z-index:1;
+}
+
+    /* ---------- CARD ---------- */
+    .day{
+      background:#fff;
+      border-radius:16px;
+      box-shadow:0 10px 20px rgba(0,0,0,.08);
+      overflow:hidden;
+      opacity:0;
+      transform:translateY(40px);
+      transition:transform .3s,box-shadow .3s,opacity .8s;
     }
-    header h1 {
-      margin: 0;
-      font-size: 2.5rem;
+    .day.visible{opacity:1; transform:none;}
+    .day:hover{transform:translateY(-8px) scale(1.02); box-shadow:0 20px 40px rgba(0,0,0,.1);}
+    .day img{width:100%; height:200px; object-fit:cover; transition:transform .35s;}
+    .day:hover img{transform:scale(1.05);}
+
+    .content{padding:1.5rem 1.75rem 2.25rem;}
+    .content h2{font-size:1.3rem; color:var(--primary);}
+    .content h3{margin-top:1.25rem; font-size:1rem; color:#555;}
+    .content ul,.content ol{margin:.6rem 0 0 1.3rem;}
+    .content li{margin-bottom:.35rem; line-height:1.35;}
+
+    .calories{color:var(--cal); font-weight:600; margin:.3rem 0 .6rem;}
+
+    /* анимация заголовка */
+    @keyframes fadeInDown{
+      from{opacity:0; transform:translateY(-20px);}
+      to  {opacity:1; transform:none;}
     }
-    header p {
-      margin: 0.5rem 0 0;
-      font-size: 1.1rem;
+
+    /* размытие-фон */
+    body::before{
+      content:"";
+      position:fixed; top:-60px; right:-60px;
+      width:320px; height:320px;
+      background:rgba(59,163,245,.15);
+      border-radius:50%; filter:blur(100px);
+      z-index:-1;
     }
-    .container {
-      max-width: 900px;
-      margin: 2rem auto;
-      padding: 0 1rem;
-    }
-    .day {
-      background: #fff;
-      border-radius: 8px;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-      margin-bottom: 2rem;
-      overflow: hidden;
-      display: flex;
-      flex-wrap: wrap;
-    }
-    .day img {
-      width: 100%;
-      max-width: 300px;
-      object-fit: cover;
-    }
-    .content {
-      flex: 1;
-      padding: 1.5rem;
-    }
-    .content h2 {
-      margin-top: 0;
-      color: #3ba3f5;
-    }
-    .content h3 {
-      margin: 0.5rem 0;
-      font-size: 1.1rem;
-      color: #444;
-    }
-    .content ul, .content ol {
-      margin: 0.5rem 0 1rem 1.5rem;
-    }
-    .calories {
-      font-weight: bold;
-      color: #e74c3c;
-    }
-    @media (max-width: 600px) {
-      .day { flex-direction: column; }
-      .day img { max-width: 100%; }
+
+    @media(max-width:420px){
+      .content{padding:1.25rem;}
+      .content h2{font-size:1.15rem;}
     }
   </style>
 </head>
@@ -74,13 +132,12 @@
 
 <header>
   <h1>Меню на 7 дней: Лето-ПП (фитнес)</h1>
-  <p>Сбалансированные низкокалорийные рецепты с подсчётом калорий для российского лета</p>
+  <p>Сбалансированные низкокалорийные рецепты для активного лета</p>
 </header>
 
 <main class="container">
-
   <!-- День 1 -->
-  <section class="day">
+  <article class="day">
     <img src="images/pp1.jpg" alt="Овсяноблин с курицей и шпинатом">
     <div class="content">
       <h2>День 1: Овсяноблин с курицей и шпинатом</h2>
@@ -91,20 +148,20 @@
         <li>1 яйцо</li>
         <li>100 г отварной куриной грудки</li>
         <li>50 г шпината</li>
-        <li>Соль, перец, зелень по вкусу</li>
+        <li>Соль, перец</li>
       </ul>
       <h3>Приготовление:</h3>
       <ol>
-        <li>Смешать овсянку с яйцом и чуть воды до консистенции теста.</li>
-        <li>Выпечь блин на сухой сковороде 2–3 минуты с каждой стороны.</li>
-        <li>На одну половину положить нарезанную курицу и шпинат, сложить блин пополам.</li>
-        <li>Прогреть ещё минуту, разрезать и подать.</li>
+        <li>Смешайте овсянку, яйцо и немного воды.</li>
+        <li>Испеките блин 2–3 мин с каждой стороны.</li>
+        <li>Добавьте курицу и шпинат, сложите блин.</li>
+        <li>Прогрейте минуту и подавайте.</li>
       </ol>
     </div>
-  </section>
+  </article>
 
   <!-- День 2 -->
-  <section class="day">
+  <article class="day">
     <img src="images/pp2.jpg" alt="Тунец с киноа и овощами">
     <div class="content">
       <h2>День 2: Тунец с киноа и овощами</h2>
@@ -112,23 +169,22 @@
       <h3>Ингредиенты:</h3>
       <ul>
         <li>100 г киноа (сухого)</li>
-        <li>120 г консервированного тунца в собственном соку</li>
-        <li>1/2 болгарского перца</li>
-        <li>1/2 свежего огурца</li>
+        <li>120 г тунца (конс.)</li>
+        <li>½ болгарского перца</li>
+        <li>½ огурца</li>
         <li>Лимонный сок, соль, перец</li>
       </ul>
       <h3>Приготовление:</h3>
       <ol>
-        <li>Киноа промыть, отварить в 200 мл воды 15 минут.</li>
-        <li>Овощи нарезать кубиками, смешать с тунцом.</li>
-        <li>Добавить готовое киноа, заправить лимонным соком и специями.</li>
-        <li>Перемешать и подать тёплым или холодным.</li>
+        <li>Отварите киноа 15 минут.</li>
+        <li>Смешайте крупу, овощи и тунца.</li>
+        <li>Заправьте соком лимона и специями.</li>
       </ol>
     </div>
-  </section>
+  </article>
 
   <!-- День 3 -->
-  <section class="day">
+  <article class="day">
     <img src="images/pp3.jpg" alt="Творожные сырники в духовке">
     <div class="content">
       <h2>День 3: Творожные сырники в духовке</h2>
@@ -138,44 +194,42 @@
         <li>200 г нежирного творога</li>
         <li>1 яйцо</li>
         <li>2 ст. л. цельнозерновой муки</li>
-        <li>Подсластитель или 1 ч. л. мёда</li>
-        <li>Ваниль по вкусу</li>
+        <li>1 ч. л. мёда</li>
+        <li>Ваниль</li>
       </ul>
       <h3>Приготовление:</h3>
       <ol>
-        <li>Смешать творог, яйцо, муку и подсластитель до однородности.</li>
-        <li>Сформировать сырники, выложить на противень с пергаментом.</li>
-        <li>Выпекать при 180 °C 20–25 минут.</li>
-        <li>Подавать с ягодами или нежирным йогуртом.</li>
+        <li>Смешайте все ингредиенты.</li>
+        <li>Сформируйте сырники, выложите на пергамент.</li>
+        <li>Выпекайте 20–25 мин при 180 °C.</li>
       </ol>
     </div>
-  </section>
+  </article>
 
   <!-- День 4 -->
-  <section class="day">
-    <img src="images/pp4.jpg" alt="Лосось с брокколи и сладким картофелем">
+  <article class="day">
+    <img src="images/pp4.jpg" alt="Лосось с брокколи и бататом">
     <div class="content">
-      <h2>День 4: Лосось с брокколи и сладким картофелем</h2>
+      <h2>День 4: Лосось с брокколи и бататом</h2>
       <p class="calories">≈ 450 ккал</p>
       <h3>Ингредиенты:</h3>
       <ul>
         <li>150 г филе лосося</li>
         <li>200 г брокколи</li>
-        <li>150 г сладкого картофеля</li>
+        <li>150 г батата</li>
         <li>Оливковое масло, соль, перец, лимон</li>
       </ul>
       <h3>Приготовление:</h3>
       <ol>
-        <li>Сладкий картофель нарезать кубиками, отварить 10 мин.</li>
-        <li>Брокколи разделить на соцветия, слегка отварить.</li>
-        <li>Лосось посолить, поперчить, сбрызнуть лимоном — запечь при 200 °C 12–15 мин.</li>
-        <li>Выложить на тарелку овощи и лосось, сбрызнуть маслом.</li>
+        <li>Батат нарежьте кубиками, отварите до мягкости.</li>
+        <li>Брокколи бланшируйте 2 мин.</li>
+        <li>Лосося приправьте, запеките 12–15 мин при 200 °C.</li>
       </ol>
     </div>
-  </section>
+  </article>
 
   <!-- День 5 -->
-  <section class="day">
+  <article class="day">
     <img src="images/pp5.jpg" alt="Индейка с гречкой и грибами">
     <div class="content">
       <h2>День 5: Индейка с гречкой и грибами</h2>
@@ -183,23 +237,22 @@
       <h3>Ингредиенты:</h3>
       <ul>
         <li>100 г гречки (сухой)</li>
-        <li>150 г фарша из индейки</li>
+        <li>150 г фарша индейки</li>
         <li>100 г шампиньонов</li>
         <li>1 луковица</li>
-        <li>Чеснок, соль, перец</li>
+        <li>Соль, перец, чеснок</li>
       </ul>
       <h3>Приготовление:</h3>
       <ol>
-        <li>Гречку отварить до готовности.</li>
-        <li>Обжарить лук и грибы, добавить индейку, приправить и готовить 7 мин.</li>
-        <li>Смешать с гречкой, прогреть вместе 2–3 минуты.</li>
-        <li>Подавать горячим.</li>
+        <li>Отварите гречку.</li>
+        <li>Обжарьте лук и грибы, добавьте индейку, готовьте 7 мин.</li>
+        <li>Смешайте с гречкой и прогрейте 2 мин.</li>
       </ol>
     </div>
-  </section>
+  </article>
 
   <!-- День 6 -->
-  <section class="day">
+  <article class="day">
     <img src="images/pp6.jpg" alt="Салат с куриной грудкой и авокадо">
     <div class="content">
       <h2>День 6: Салат с куриной грудкой и авокадо</h2>
@@ -207,45 +260,62 @@
       <h3>Ингредиенты:</h3>
       <ul>
         <li>120 г отварной куриной грудки</li>
-        <li>1/2 авокадо</li>
+        <li>½ авокадо</li>
         <li>50 г микса салата</li>
         <li>10 г семян тыквы</li>
         <li>Лимонный сок, оливковое масло, соль, перец</li>
       </ul>
       <h3>Приготовление:</h3>
       <ol>
-        <li>Нарезать курицу и авокадо кубиками.</li>
-        <li>Смешать с салатом и семенами.</li>
-        <li>Заправить маслом и лимонным соком.</li>
-        <li>Перемешать и сразу подавать.</li>
+        <li>Курицу и авокадо нарежьте кубиками.</li>
+        <li>Смешайте с салатом и семенами.</li>
+        <li>Заправьте маслом и соком лимона, приправьте.</li>
       </ol>
     </div>
-  </section>
+  </article>
 
   <!-- День 7 -->
-  <section class="day">
+  <article class="day">
     <img src="images/pp7.jpg" alt="Протеиновый смузи с ягодами">
     <div class="content">
       <h2>День 7: Протеиновый смузи с ягодами</h2>
       <p class="calories">≈ 250 ккал</p>
       <h3>Ингредиенты:</h3>
       <ul>
-        <li>150 г замороженных ягод (клубника, черника)</li>
+        <li>150 г замороженных ягод</li>
         <li>1 банан</li>
-        <li>200 мл нежирного кефира или йогурта</li>
-        <li>1 мерная ложка протеинового порошка</li>
-        <li>Мёд по вкусу</li>
+        <li>200 мл нежирного кефира/йогурта</li>
+        <li>1 мерная ложка протеина</li>
+        <li>Мёд — по вкусу</li>
       </ul>
       <h3>Приготовление:</h3>
       <ol>
-        <li>Все ингредиенты поместить в блендер.</li>
-        <li>Взбить до гладкой консистенции.</li>
-        <li>Перелить в стакан и подавать сразу.</li>
+        <li>Поместите всё в блендер.</li>
+        <li>Взбейте до однородности и подавайте.</li>
       </ol>
     </div>
-  </section>
-
+  </article>
 </main>
+
+<!-- ---------- JS: анимация появления карточек ---------- -->
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const cards = document.querySelectorAll('.day');
+    const io = new IntersectionObserver((entries, obs) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          obs.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.15 });
+
+    cards.forEach((card, i) => {
+      card.style.transitionDelay = `${i * 80}ms`;
+      io.observe(card);
+    });
+  });
+</script>
 
 </body>
 </html>
