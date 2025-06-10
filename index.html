@@ -7,17 +7,33 @@
   <style>
     * { box-sizing: border-box; }
     body { margin: 0; padding: 0; font-family: "Segoe UI", sans-serif; color: #333; }
-    /* Навигация */
-    .site-nav { position: relative; background: #fff; box-shadow: 0 2px 6px rgba(0,0,0,0.1); }
-    .site-nav ul { display: flex; margin: 0; padding: 0; list-style: none; }
-    .site-nav li { flex: 1; text-align: center; }
-    .site-nav a {
-      display: block;
-      padding: 1rem;
-      color: #444;
-      text-decoration: none;
-      transition: color .3s;
-    }
+/* Навигация */
+.site-nav {
+  display: flex;
+  justify-content: center;
+  background: #fff;
+  padding: 1rem;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
+.nav-button {
+  background: #f0f0f0;
+  border: none;
+  border-radius: 20px;
+  margin: 0 0.5rem;
+  padding: 0.75rem 1.5rem;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background 0.3s, transform 0.2s;
+}
+.nav-button:hover {
+  background: #e0e0e0;
+  transform: translateY(-2px);
+}
+.nav-button.active {
+  background: #76b852;
+  color: #fff;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
     .site-nav a.active,
     .site-nav a:hover { color: #000; }
     .nav-indicator {
@@ -92,14 +108,11 @@
 </head>
 <body>
 
-  <nav class="site-nav">
-    <ul>
-      <li><a href="#" data-page="menu">Лето-Дача</a></li>
-      <li><a href="#" data-page="pp_menu">Лето-ПП</a></li>
-      <li><a href="#" data-page="menu_picnic">Лето-Пикник</a></li>
-    </ul>
-    <div class="nav-indicator"></div>
-  </nav>
+<nav class="site-nav">
+  <button class="nav-button" data-page="menu">Лето-Дача</button>
+  <button class="nav-button" data-page="pp_menu">Лето-ПП</button>
+  <button class="nav-button" data-page="menu_picnic">Лето-Пикник</button>
+</nav>
 
   <!-- Секция "Лето-Дача" -->
   <section id="menu" class="section active">
@@ -595,40 +608,29 @@
     </div>
   </section>
 
-  <script>
-    document.addEventListener('DOMContentLoaded', () => {
-      const links = document.querySelectorAll('.site-nav a');
-      const sections = document.querySelectorAll('.section');
-      const indicator = document.querySelector('.nav-indicator');
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  const buttons = document.querySelectorAll('.nav-button');
+  const sections = document.querySelectorAll('.section');
 
-      function activate(link) {
-        links.forEach(l => l.classList.remove('active'));
-        link.classList.add('active');
-
-        const page = link.dataset.page;
-        sections.forEach(sec => {
-          sec.id === page
-            ? sec.classList.add('active')
-            : sec.classList.remove('active');
-        });
-
-        // Indicator
-        const rect = link.getBoundingClientRect();
-        const navRect = link.closest('.site-nav').getBoundingClientRect();
-        indicator.style.left = (rect.left - navRect.left) + 'px';
-        indicator.style.width = rect.width + 'px';
-      }
-
-      links.forEach(link => {
-        link.addEventListener('click', e => {
-          e.preventDefault();
-          activate(link);
-        });
-      });
-
-      // Инициализация
-      activate(links[0]);
+  function activate(btn) {
+    buttons.forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    const page = btn.dataset.page;
+    sections.forEach(sec => {
+      sec.id === page
+        ? sec.classList.add('active')
+        : sec.classList.remove('active');
     });
-  </script>
+  }
+
+  buttons.forEach(btn => {
+    btn.addEventListener('click', () => activate(btn));
+  });
+
+  // Инициализация: активируем первую
+  activate(buttons[0]);
+});
+</script>
 </body>
 </html>
